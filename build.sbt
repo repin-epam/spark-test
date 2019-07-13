@@ -4,6 +4,11 @@ scalaVersion := "2.11.12"
 
 libraryDependencies += "org.apache.spark" %% "spark-core" % "2.3.0" % "provided"
 libraryDependencies += "org.apache.spark" %% "spark-sql" % "2.3.0" % "provided"
+libraryDependencies ++= Seq(
+  "junit" % "junit" % "4.12" % "test",
+  "com.holdenkarau" % "spark-testing-base_2.11" % "2.2.0_0.7.2" % "test"
+)
+
 
 assemblyMergeStrategy in assembly := {
   case PathList("org", "aopalliance", xs@_*) => MergeStrategy.last
@@ -15,6 +20,7 @@ assemblyMergeStrategy in assembly := {
   case PathList("com", "esotericsoftware", xs@_*) => MergeStrategy.last
   case PathList("com", "codahale", xs@_*) => MergeStrategy.last
   case PathList("com", "yammer", xs@_*) => MergeStrategy.last
+
   case "about.html" => MergeStrategy.rename
   case "META-INF/ECLIPSEF.RSA" => MergeStrategy.last
   case "META-INF/mailcap" => MergeStrategy.last

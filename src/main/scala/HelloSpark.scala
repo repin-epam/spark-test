@@ -1,28 +1,16 @@
-import org.apache.spark.sql.{Row, SparkSession}
-import org.apache.spark.sql.types._
+import org.apache.spark.sql.functions._
+import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}
 
-object HelloSpark {
+object HelloSpark extends FileLoader {
   def main(args: Array[String]) {
-    val spark = SparkSession.builder.appName("hello spark").getOrCreate()
+    val session = SparkSession.builder
+      .appName("Spark task 3")
+      .master("local[*]")
+      .getOrCreate
 
-    val rows = Seq(
-      Row(1, "hello"),
-      Row(2, "world")
-    )
+    val df: DataFrame = loadFile(session, args(0))
 
-    val schema = StructType(List(
-      StructField("number", IntegerType, nullable = true),
-      StructField("word", StringType, nullable = true)
-    ))
-
-    val df = spark.createDataFrame(
-      spark.sparkContext.parallelize(rows),
-      schema
-    )
-
-    println("count: ")
-    println(df.count())
-
-    spark.stop()
+    val res = Task3.performTask(df)
+      .write.mode(SaveMode.Overwrite).option("header", "true").csv(args(1))
   }
 }
